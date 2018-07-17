@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    tools:context=".webview.WebViewActivity">
+
+    <LinearLayout
+        android:id="@+id/webViewSite"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="50dp">
+
+        <Button
+            android:id="@+id/webViewGoogle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Google"
+            />
+        <Button
+            android:id="@+id/webViewYnet"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Ynet"
+            />
+
+    </LinearLayout>
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/webView1"
+        android:layout_below="@id/webViewSite"
+         />
+
+</RelativeLayout>
