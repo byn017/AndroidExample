@@ -1,0 +1,317 @@
+1. CMakeList.txt
+-----------------
+target_link_libraries --> adding log and android
+
+native-lib.cpp
+-----------------
+#include <android/log.h>
+
+#define MODULE_NAME "JNI-TEST"
+#define LOGD(...) \
+  __android_log_print(ANDROID_LOG_DEBUG, MODULE_NAME, __VA_ARGS__)
+  
+  
+   LOGD("stringFromJNI: %s\n", hello.c_str());
+   
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+   <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+</style>
+
+2. LISTVIEW
+----------
+ exampleListView = (ListView)findViewById(R.id.exampleListView);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.listview_example, R.id.textView, exampleList);
+        exampleListView.setAdapter(arrayAdapter);
+
+        exampleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(),exampleList[position],Toast.LENGTH_LONG).show();
+            }
+        });
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3. RecyclerView
+------------
+android.support.v7.widget.RecyclerView
+final RecyclerView rv = (RecyclerView) findViewById(R.id.recyclerView);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv.setAdapter(new MyAdapter());
+        
+
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+
+    private final List<String> notifiactionAndDialogList=  Arrays.asList("AlertDialog","Notification","ProgressDialog");
+    
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.list_cell, parent, false);
+        return new MyViewHolder(view);
+    }
+    
+         public class MyViewHolder extends RecyclerView.ViewHolder {
+                public MyViewHolder(final View itemView) {
+            super(itemView);
+
+            name = ((TextView) itemView.findViewById(R.id.name));
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4. ProgressDialog
+---------------
+progress = ProgressDialog.show(itemView.getContext(), "", "ProgressDialog example", true);
+                        Thread t = new Thread()
+                        {
+                            public void run()
+                            {
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (Exception e) {
+                                }
+                                progress.dismiss();
+                            }
+                        };
+                        t.start();
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5. NotificationManager
+--------------------
+int NOTIFICATION_ID = 234;
+                        NotificationManager notificationManager = (NotificationManager) itemView.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                        String CHANNEL_ID = "my_channel_01";
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            CharSequence name = "my_channel";
+                            String Description = "This is my channel";
+                            int importance = NotificationManager.IMPORTANCE_HIGH;
+                            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+                            mChannel.setDescription(Description);
+                            mChannel.enableLights(true);
+                            mChannel.setLightColor(Color.RED);
+                            mChannel.enableVibration(true);
+                            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+                            mChannel.setShowBadge(false);
+                            notificationManager.createNotificationChannel(mChannel);
+                        }
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(itemView.getContext(), CHANNEL_ID)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("My Notification")
+                                .setContentText("Yakir example");
+
+                        notificationManager.notify(NOTIFICATION_ID, builder.build());
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+6. AlertDialog
+------------
+ AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
+                        builder.setTitle("AlertDialog");
+                        builder.setMessage("Simple AlertDialog example");
+                        builder.setPositiveButton("EXIT", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing but close the dialog
+                                dialog.dismiss();
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+7. Handler
+--------
+public Handler mHandler = new Handler() {
+        Runnable runnable;
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+8. sendBroadcast
+-------------
+Intent myIntent = new Intent("UPDATE_UI_TIME");
+                            myIntent.putExtra("TIME",time);
+                            getApplicationContext().sendBroadcast(myIntent);
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BroadcastReceiver
+------------------
+IntentFilter filter = new IntentFilter();
+        filter.addAction("UPDATE_UI_TIME");
+        getContext().registerReceiver(myReceiver,filter);
+        
+ BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction().equals("UPDATE_UI_TIME")) {
+                if (intent.hasExtra("TIME")) {
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+9. AsyncTask
+----------
+new LongOperation(true).execute("yakir","nahum");
+private class LongOperation extends AsyncTask<String, Void, String> {
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Timer
+------
+timer = new Timer();
+                    timer.scheduleAtFixedRate(new TimerTask() {
+                        @Override
+                        public void run() {
+                        }
+                         }, 0, 1000);//put here time 1000 milliseconds=1 second
+ mHandler.removeCallbacks(runnable);
+                    mHandler.postDelayed(runnable =  new Runnable() {
+                        @Override
+                        public void run() {
+                            
+                        }
+                    },1000);
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+10. Parcelable
+-----------
+ArrayList<String> des = new ArrayList<>();
+                            des.add("11111");
+                            des.add("22222");
+                            MyParcelable mObjects = new MyParcelable("yakir",30,des);
+                            
+ Intent mIntent = getIntent();
+ MyParcelable myParcelable = mIntent.getParcelableExtra("MyParcelableKey");
+        
+public class MyParcelable implements Parcelable {
+ public MyParcelable(String name, int age, ArrayList<String> description) {
+ public MyParcelable(Parcel source) {
+        age = source.readInt();
+        name = source.readString();
+        description = source.createStringArrayList();
+    }
+    public static final Creator<MyParcelable> CREATOR = new Creator<MyParcelable>() {
+        @Override
+        public MyParcelable createFromParcel(Parcel in) {
+            return new MyParcelable(in);
+        }
+
+        @Override
+        public MyParcelable[] newArray(int size) {
+            return new MyParcelable[size];
+        }
+    };
+     @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(age);
+        dest.writeString(name);
+        dest.writeStringList(description);
+    }
+    public ArrayList<String> getDescription() {
+        if (!(description == null))
+            return description;
+        else
+            return new ArrayList<String>();
+    }
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+11. startActivityForResult
+-----------------------
+@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: ");
+    }
+    Intent listViewActivity = new Intent(ExampleActivity.this, ListViewActivity.class);
+      startActivityForResult(listViewActivity,1);
+
+ setResult(Activity.RESULT_OK);
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+12. SharedPreferences 
+-----------------
+private static final String PREFS_NAME = "YAKIR";
+private SharedPreferences mPrefs;
+mPrefs.getInt("QUALITY", 20);
+SharedPreferences.Editor editor = mPrefs.edit();
+editor.putInt("QUALITY", imageQuality);
+editor.commit();
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+13. createDialog
+-------------
+ dialog.show();
+ 
+ dialog = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams param = window.getAttributes();
+        // set the layout at right bottom
+        param.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+        dialog.setCanceledOnTouchOutside(true);
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+14. singletone
+-----------
+private static Singleton single_instance = null;
+public static Singleton getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new Singleton();
+        return single_instance;
+    }
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+15. AIDL
+-----
+@Override
+    public IBinder onBind(Intent intent) {
+        return binder;
+    }
+
+   public final IMyAidlInterface.Stub binder = new IMyAidlInterface.Stub() {
+       @Override
+       public void setTime(int  time) throws RemoteException {
+       }
+   };
+   
+IMyAidlInterface myAIDL = null;
+if (myAIDL == null) {
+            Intent intent = new Intent(getContext(),MainService.class);
+            getContext().bindService(intent,connection,Context.BIND_AUTO_CREATE);
+        }
+private ServiceConnection connection = new ServiceConnection() {
+ @Override
+    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        myAIDL = IMyAidlInterface.Stub.asInterface(iBinder);
+    }
+}
+
+16. BOOT
+-----
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+android:directBootAware="true"
+<receiver
+    android:name=".BootReceiver"
+    android:directBootAware="true"
+    android:exported="false">
+    <intent-filter>
+        <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+        <!-- For pre-N devices -->
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+    </intent-filter>
+</receiver>
+
+17. buttonshape
+-------------
+<?xml version="1.0" encoding="utf-8"?>
+    <selector xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:state_pressed="true" >
+ <item>
+        <shape  android:shape="rectangle" >
+            <corners
+                android:radius="8dp"
+                />
+            <gradient
+                android:centerColor="#FFFF00"
+                android:startColor="#FFFF00"
+                android:endColor="#FFFF00"
+                android:type="linear"
+                />
+
+            <size
+                android:width="100dp"
+                android:height="30dp"
+                />
+            <stroke
+                android:width="3dp"
+                android:color="@android:color/holo_blue_dark"
+                />
+        </shape>
+    </item>
+</selector>
+
